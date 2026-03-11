@@ -60,3 +60,23 @@ flowchart TD
     BE --> Data
 ```
 
+## Front-end
+
+Endpoint:
+- `/home`
+- `/home/article/{id}`
+- `/feed`
+- `/feed/article/{id}`
+- `/aboutme`
+
+## Back-end
+
+Endpoints:
+- `/articles`
+- `/articles/latest`
+- `/articles?search=""&filter_tags=""&sorting="ascending|descending"`
+- `/articles/{id}`
+- `/articles/{id}/next`
+- `/articles/{id}/prev`
+- `/articles/{id}/recommended`
+- `/aboutme`
