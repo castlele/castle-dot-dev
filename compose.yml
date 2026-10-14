@@ -1,17 +1,14 @@
-# Copy to the VPS next to .env (SITE_DOMAIN=...) and certs/.
+# Copy to the VPS as ~/castle-dot-dev/compose.yml, next to .env with
+# PROXY_NETWORK=<docker network of the front Caddy>.
 services:
   site:
     image: ghcr.io/castlele/castle-dot-dev:latest
+    container_name: castledot_site
     restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    environment:
-      SITE_DOMAIN: ${SITE_DOMAIN}
-      SITE_TLS: tls /certs/origin.pem /certs/origin.key
-    volumes:
-      - ./certs:/certs:ro
-      - caddy_data:/data
+    networks:
+      - proxy
 
-volumes:
-  caddy_data:
+networks:
+  proxy:
+    external: true
+    name: ${PROXY_NETWORK}

@@ -1,8 +1,5 @@
-{$SITE_DOMAIN} {
-	# On the VPS: "tls /certs/origin.pem /certs/origin.key"
-	# (Cloudflare Origin Certificate). Empty for a local run.
-	{$SITE_TLS}
-
+# Plain HTTP inside the container. TLS ends in the front Caddy on the VPS.
+:80 {
 	root * /srv
 	encode zstd gzip
 
