@@ -11,6 +11,7 @@ Markdown in git. To publish = to push to `master`.
 Read only the spec you need:
 
 - Requirements and URLs — `docs/dev.md`
+- Deploy and server setup — `docs/deploy.md`
 
 ## Commands
 

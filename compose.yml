@@ -1,0 +1,17 @@
+# Copy to the VPS next to .env (SITE_DOMAIN=...) and certs/.
+services:
+  site:
+    image: ghcr.io/castlele/castle-dot-dev:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN}
+      SITE_TLS: tls /certs/origin.pem /certs/origin.key
+    volumes:
+      - ./certs:/certs:ro
+      - caddy_data:/data
+
+volumes:
+  caddy_data:
