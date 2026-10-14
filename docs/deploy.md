@@ -4,51 +4,37 @@ Push to `master` → `.github/workflows/ci.yml` checks the code, builds the Dock
 image (Caddy + static `out/`), pushes it to GHCR and restarts it on the VPS over
 SSH.
 
-The VPS already runs a front Caddy (`firefly_caddy`, Docker) on ports 80/443.
-The site container has no public ports. It joins the front Caddy's Docker
-network, and the front Caddy proxies `castledot.dev` to it.
+The VPS also runs firefly, and its Caddy owns ports 80/443. The site does not
+touch firefly: its own Caddy listens on host port 8443 with a Cloudflare Origin
+Certificate. A Cloudflare Origin Rule sends `castledot.dev` traffic to 8443.
 
 ```
-browser → Cloudflare → firefly_caddy :443 → castledot_site :80 → /srv
+browser → Cloudflare :443 → VPS :8443 → castledot_site (Caddy) → /srv
 ```
 
 ## One-time setup
 
-1. Cloudflare DNS for `castledot.dev`: `A @ 72.56.110.238` and
-   `CNAME www castledot.dev`, both proxied (orange cloud). SSL/TLS mode: **Full
-   (strict)**.
-2. Cloudflare → SSL/TLS → Origin Server → create a certificate for
-   `castledot.dev, *.castledot.dev`. Save it next to the firefly compose file as
-   `castledot-certs/origin.pem` and `castledot-certs/origin.key`.
-3. Firefly compose, service `firefly_caddy`: mount the certs.
-
-   ```yaml
-   volumes:
-     - ./castledot-certs:/certs/castledot:ro
-   ```
-
-4. Firefly Caddyfile: add the site block.
-
-   ```caddyfile
-   castledot.dev, www.castledot.dev {
-   	tls /certs/castledot/origin.pem /certs/castledot/origin.key
-   	reverse_proxy castledot_site:80
-   }
-   ```
-
-5. Find the front Caddy's network:
-   `docker inspect firefly_caddy -f '{{range $k, $v := .NetworkSettings.Networks}}{{$k}}{{end}}'`.
-   Create `~/castle-dot-dev/.env` with `PROXY_NETWORK=<that name>` and copy
-   `compose.yml` into `~/castle-dot-dev/`.
+1. Cloudflare, zone **castledot.dev** → DNS → Records:
+   - `A`, name `@`, `72.56.110.238`, Proxied.
+   - `CNAME`, name `www`, target `castledot.dev`, Proxied.
+2. Zone castledot.dev → SSL/TLS → Overview: mode **Full (strict)**.
+3. Zone castledot.dev → Rules → Origin Rules → Create rule:
+   - When: Hostname is in `castledot.dev`, `www.castledot.dev`.
+   - Then: Destination Port → Rewrite to `8443`.
+4. Zone castledot.dev → SSL/TLS → Origin Server → Create Certificate for
+   `castledot.dev, *.castledot.dev`. On the VPS save it as
+   `~/castle-dot-dev/certs/origin.pem` and `~/castle-dot-dev/certs/origin.key`.
+5. On the VPS: copy `compose.yml` into `~/castle-dot-dev/`. Open port 8443 in
+   the firewall (`ufw allow 8443/tcp`, and in the hosting panel if it has a
+   firewall).
 6. GitHub repo → Settings → Secrets and variables → Actions:
    - Variable `SITE_URL` = `https://castledot.dev`.
    - Secrets `VPS_HOST` = `72.56.110.238`, `VPS_USER`, `VPS_SSH_KEY` (private
      key of a user that can run `docker`).
 7. Push to `master`. After the first image lands in GHCR, make the package
    public (GitHub → Packages → castle-dot-dev → Settings), or run
-   `docker login ghcr.io` on the VPS with a `read:packages` token.
-8. Restart the front Caddy so it picks up the new block and mount:
-   `docker compose up -d firefly_caddy` in the firefly folder.
+   `docker login ghcr.io` on the VPS with a `read:packages` token. Then re-run
+   the failed deploy job.
 
 ## Local check
 

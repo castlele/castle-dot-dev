@@ -1,14 +1,15 @@
-# Copy to the VPS as ~/castle-dot-dev/compose.yml, next to .env with
-# PROXY_NETWORK=<docker network of the front Caddy>.
+# Copy to the VPS as ~/castle-dot-dev/compose.yml, next to certs/.
+# Port 443 belongs to firefly; a Cloudflare Origin Rule sends castledot.dev
+# traffic to 8443.
 services:
   site:
     image: ghcr.io/castlele/castle-dot-dev:latest
     container_name: castledot_site
     restart: unless-stopped
-    networks:
-      - proxy
-
-networks:
-  proxy:
-    external: true
-    name: ${PROXY_NETWORK}
+    ports:
+      - "8443:443"
+    environment:
+      SITE_ADDRESS: castledot.dev, www.castledot.dev
+      SITE_TLS: tls /certs/origin.pem /certs/origin.key
+    volumes:
+      - ./certs:/certs:ro

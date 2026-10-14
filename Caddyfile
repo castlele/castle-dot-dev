@@ -1,5 +1,8 @@
-# Plain HTTP inside the container. TLS ends in the front Caddy on the VPS.
-:80 {
+# Local run: plain HTTP on :80. On the VPS compose.yml sets the domains and
+# the Cloudflare Origin Certificate.
+{$SITE_ADDRESS::80} {
+	{$SITE_TLS}
+
 	root * /srv
 	encode zstd gzip
 
