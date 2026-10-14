@@ -57,8 +57,9 @@ A Claude Code hook formats the files you edit at the end of each turn
 - Commit messages: `type(scope): message`, for example `feat(feed):`,
   `fix(articles):`, `chore(deploy):`. One subject line only: no body, no
   trailers (no `Co-Authored-By`).
-- Branches: work and commit directly on `master`. Do not create branches or
-  worktrees unless the user asks for one.
+- Branches: work directly on `master`. Do not create branches or worktrees
+  unless the user asks for one.
+- Do not commit or push. Leave changes uncommitted; the user commits them.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
