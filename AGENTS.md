@@ -56,8 +56,9 @@ A Claude Code hook formats the files you edit at the end of each turn
   Test names: `` `GIVEN … WHEN … THEN …` ``.
 - Commit messages: `type(scope): message`, for example `feat(feed):`,
   `fix(articles):`, `chore(deploy):`. One subject line only: no body, no
-  trailers (no `Co-Authored-By`). Work happens on task branches merged into
-  `master` via PR.
+  trailers (no `Co-Authored-By`).
+- Branches: work and commit directly on `master`. Do not create branches or
+  worktrees unless the user asks for one.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
