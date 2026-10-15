@@ -1,0 +1,7 @@
+.row {
+    flex: auto;
+    display: flex;
+    align-items: center;
+    justify-content: inherit;
+    flex-direction: row;
+}
