@@ -24,10 +24,28 @@
 }
 
 .content :global(pre) {
+  position: relative;
   padding: var(--space-3);
   border: var(--border);
-  overflow-x: auto;
   font-size: var(--font-size-s);
+}
+
+/* The code scrolls, not the pre, so the copy button stays in place. */
+.content :global(pre > code) {
+  display: block;
+  overflow-x: auto;
+}
+
+.content :global(button[data-copy]) {
+  position: absolute;
+  top: var(--space-1);
+  right: var(--space-1);
+  font: inherit;
+  color: var(--color-fg);
+  background: var(--color-bg);
+  border: var(--border);
+  padding: 0 var(--space-2);
+  cursor: pointer;
 }
 
 .content :global(:not(pre) > code) {
@@ -40,6 +58,29 @@
   padding-left: var(--space-3);
   border-left: var(--border);
   color: var(--color-muted);
+}
+
+.content :global(table) {
+  /* Block display lets a wide table scroll on its own, not the page. */
+  display: block;
+  overflow-x: auto;
+  margin: var(--space-4) 0;
+  border-collapse: collapse;
+}
+
+.content :global(th),
+.content :global(td) {
+  padding: var(--space-1) var(--space-2);
+  border: var(--border);
+}
+
+.content :global(th) {
+  background: var(--color-code-bg);
+}
+
+/* Columns aligned with `:--:` in Markdown keep their align attribute. */
+.content :global(th:not([align])) {
+  text-align: left;
 }
 
 @media (prefers-color-scheme: dark) {

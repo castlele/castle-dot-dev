@@ -8,6 +8,7 @@ import {
   renderMarkdown,
   similar,
 } from "@/lib/articles";
+import { CopyCode } from "./CopyCode";
 import styles from "./page.module.css";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -57,9 +58,10 @@ export default async function ArticlePage({ params }: Props) {
       </p>
       <div
         className={styles.content}
-        // Built from our own Markdown; remark-rehype drops raw HTML.
+        // Built from our own Markdown, raw HTML included; trusted content.
         dangerouslySetInnerHTML={{ __html: html }}
       />
+      <CopyCode />
       <nav className={styles.pager}>
         {older ? (
           <Link href={`/articles/${older.slug}/`}>← {older.title}</Link>

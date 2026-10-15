@@ -12,6 +12,7 @@ Read only the spec you need:
 
 - Requirements and URLs — `docs/dev.md`
 - Deploy and server setup — `docs/deploy.md`
+- Writing articles: frontmatter, images, drafts — `docs/articles.md`
 
 ## Commands
 
@@ -37,11 +38,7 @@ A Claude Code hook formats the files you edit at the end of each turn
 
 ## Content
 
-- Article: `content/articles/<slug>.md`. The file name is the URL slug.
-  Frontmatter: `title`, `date` (YYYY-MM-DD), `tags` (list), `description`,
-  optional `draft: true` (hidden from production builds).
-- Article images: `public/articles/<slug>/`, linked as
-  `/articles/<slug>/<file>`.
+- Articles: `content/articles/<slug>.md`. Rules in `docs/articles.md`.
 - About page: `content/about.md`. Avatar and CV: `public/`.
 - Safe to publish: no data that can lead to family or friends.
 

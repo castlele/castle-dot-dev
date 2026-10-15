@@ -6,6 +6,7 @@ import rehypeStringify from "rehype-stringify";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
+import type { ShikiTransformer } from "shiki";
 import { unified } from "unified";
 
 export type Article = {
@@ -82,15 +83,30 @@ export function similar(articles: Article[], slug: string, count = 3) {
     .map(({ a }) => a);
 }
 
+// A copy button in every code block; CopyCode handles the click.
+const copyButton: ShikiTransformer = {
+  name: "copy-button",
+  pre(pre) {
+    pre.children.push({
+      type: "element",
+      tagName: "button",
+      properties: { type: "button", dataCopy: "", ariaLive: "polite" },
+      children: [{ type: "text", value: "copy" }],
+    });
+  },
+};
+
 export async function renderMarkdown(markdown: string): Promise<string> {
   const file = await unified()
     .use(remarkParse)
     .use(remarkGfm)
-    .use(remarkRehype)
+    // Raw HTML passes through as-is: only repo owners write articles.
+    .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeShiki, {
       themes: { light: "github-light", dark: "github-dark" },
+      transformers: [copyButton],
     })
-    .use(rehypeStringify)
+    .use(rehypeStringify, { allowDangerousHtml: true })
     .process(markdown);
   return String(file);
 }

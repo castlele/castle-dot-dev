@@ -15,10 +15,12 @@ export type About = {
 export async function getAbout(): Promise<About> {
   const file = path.join(process.cwd(), "content/about.md");
   const { data, content } = matter(await fs.readFile(file, "utf8"));
+
   for (const field of ["name", "role", "greeting", "avatar"]) {
     if (typeof data[field] !== "string") {
       throw new Error(`content/about.md: bad or missing "${field}"`);
     }
   }
+
   return { ...data, links: data.links ?? [], body: content } as About;
 }
