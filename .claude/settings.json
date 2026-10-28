@@ -1,41 +1,16 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm test)",
-      "Bash(npm run test)",
-      "Bash(npm run lint)",
-      "Bash(npm run build)",
-      "Bash(npx vitest run *)",
-      "Bash(npx prettier --check *)",
+      "Bash(./gradlew jvmTest*)",
+      "Bash(./gradlew wasmJsBrowserDistribution*)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
       "Bash(git show:*)"
     ],
-    "deny": ["Read(.next/**)", "Read(out/**)", "Read(node_modules/**)"]
-  },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/track-edit.sh"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/format.sh",
-            "timeout": 120
-          }
-        ]
-      }
+    "deny": [
+      "Read(build/**)",
+      "Read(.gradle/**)"
     ]
   }
 }

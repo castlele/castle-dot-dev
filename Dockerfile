@@ -1,12 +1,11 @@
-FROM node:22-alpine AS build
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
-COPY . .
-ARG SITE_URL
-ENV SITE_URL=$SITE_URL
-RUN npm run build
+COPY gradlew settings.gradle.kts build.gradle.kts gradle.properties ./
+COPY gradle gradle
+COPY content content
+COPY src src
+RUN ./gradlew --no-daemon wasmJsBrowserDistribution
 
 FROM caddy:2-alpine
 COPY Caddyfile /etc/caddy/Caddyfile
-COPY --from=build /app/out /srv
+COPY --from=build /app/build/dist/wasmJs/productionExecutable /srv

@@ -45,15 +45,20 @@ HTML. ADMIN = anyone who can push to `master`. USER = site visitor.
 
 ```mermaid
 flowchart LR
-    MD["content/*.md"] --> Build["next build (output: export)"]
-    Build --> Out["out/ (HTML, CSS, JS)"]
-    Out --> Image["Docker image: Caddy + out/"]
+    MD["content/*.md"] --> Gen["Gradle: generateContent"]
+    Gen --> Build["wasmJsBrowserDistribution"]
+    Build --> Out["build/dist/wasmJs/productionExecutable"]
+    Out --> Image["Docker image: Caddy + dist"]
     Image --> VPS["VPS behind Cloudflare"]
 ```
 
-- Stack: Next.js + React + TypeScript, CSS Modules, Pixelify Sans font.
-- Search, tag filter and date sort run in the browser over an index that the
-  build puts into the feed page.
+- Stack: Kotlin + Compose Multiplatform (Wasm target), Pixelify Sans font.
+- The build turns Markdown into Kotlin strings. The app parses them at start.
+- Search, tag filter and date sort run in the browser over those articles.
+- Routing: the app reads the URL and uses the History API. Caddy serves
+  `index.html` for every path.
+- The page is a canvas. Search engines and link previews see only the static
+  title and description in `index.html`. This is accepted.
 - Deploy: push to `master` → GitHub Actions → image in GHCR → VPS pulls it.
 
 ## Front-end

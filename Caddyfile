@@ -6,13 +6,11 @@
 	root * /srv
 	encode zstd gzip
 
-	@static path /_next/static/*
-	header @static Cache-Control "public, max-age=31536000, immutable"
+	# Code and resources change on every release; revalidate them.
+	header Cache-Control "no-cache"
+
+	# Every page is the same Compose app; it reads the URL itself.
+	try_files {path} /index.html
 
 	file_server
-
-	handle_errors 404 {
-		rewrite * /404.html
-		file_server
-	}
 }

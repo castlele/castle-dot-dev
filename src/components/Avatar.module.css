@@ -1,5 +1,0 @@
-.avatar {
-  flex-shrink: 0;
-  border: var(--border);
-  image-rendering: pixelated;
-}
