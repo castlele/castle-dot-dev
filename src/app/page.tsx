@@ -12,14 +12,18 @@ export default async function Home() {
   return (
     <>
       <section className={styles.greeting}>
-        <Avatar src={about.avatar} name={about.name} />
-        <div>
-          <h1 className={styles.name}>{about.name}</h1>
-          <p className={styles.role}>{about.role}</p>
-          <p>
-            {about.greeting} <Link href="/about/">more →</Link>
-          </p>
-        </div>
+      <div style={{display: "flex", flex: "auto", flexDirection: "row"}}>
+      <Avatar src={about.avatar} name={about.name} />
+      <div>
+      <div>
+      <h1 className={styles.name}>{about.name}</h1>
+      <p className={styles.role}>{about.role}</p>
+      </div>
+      <p>
+      {about.greeting} <Link href="/about/">more →</Link>
+      </p>
+      </div>
+      </div>
       </section>
       <section>
         <h2>latest</h2>

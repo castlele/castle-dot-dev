@@ -2,7 +2,7 @@
 name: castle
 role: Software engineer
 greeting: Hi! I build apps and write about code, tools and design.
-avatar: /avatar.svg
+avatar: /avatar.png
 # Put the PDF into public/ and uncomment:
 # cv: /cv.pdf
 links:
