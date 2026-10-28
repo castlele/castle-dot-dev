@@ -1,5 +1,8 @@
 FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
+# Node, downloaded by Gradle, needs libatomic.
+RUN apt-get update && apt-get install -y --no-install-recommends libatomic1 \
+    && rm -rf /var/lib/apt/lists/*
 COPY gradlew settings.gradle.kts build.gradle.kts gradle.properties ./
 COPY gradle gradle
 COPY content content
