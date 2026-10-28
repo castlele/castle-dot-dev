@@ -1,7 +1,7 @@
 # Deploy
 
 Push to `master` → `.github/workflows/ci.yml` checks the code, builds the Docker
-image (Caddy + static `out/`), pushes it to GHCR and restarts it on the VPS over
+image (Caddy + the Wasm build), pushes it to GHCR and restarts it on the VPS over
 SSH.
 
 The VPS also runs firefly, and its Caddy owns ports 80/443. The site does not
@@ -28,7 +28,6 @@ browser → Cloudflare :443 → VPS :8443 → castledot_site (Caddy) → /srv
    the firewall (`ufw allow 8443/tcp`, and in the hosting panel if it has a
    firewall).
 6. GitHub repo → Settings → Secrets and variables → Actions:
-   - Variable `SITE_URL` = `https://castledot.dev`.
    - Secrets `VPS_HOST` = `72.56.110.238`, `VPS_USER`, `VPS_SSH_KEY` (private
      key of a user that can run `docker`).
 7. Push to `master`. After the first image lands in GHCR, make the package
